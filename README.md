@@ -95,7 +95,9 @@ You can execute the Python scripts directly for manual verification or standalon
 
 ## API Endpoints
 
-Once the application is running (locally or inside Docker), you can interact with it at `http://localhost:8000`.
+Once the application is running, you can interact with it at:
+- **With Docker**: `http://localhost:8366`
+- **Without Docker (Locally)**: `http://localhost:8000`
 
 ### `GET /`
 - **Description**: Health check endpoint.

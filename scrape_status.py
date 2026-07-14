@@ -17,6 +17,19 @@ os.makedirs(DATA_DIR, exist_ok=True)
 AUTH_FILE = os.path.join(DATA_DIR, "auth.json")
 TARGET_URL = "https://my.uni-assist.de/antragsuebersicht"
 
+def clean_german_characters(text: str) -> str:
+    """Replaces German umlauts and special characters with their English/ASCII equivalents."""
+    if not text:
+        return ""
+    replacements = {
+        'ä': 'ae', 'ö': 'oe', 'ü': 'ue',
+        'Ä': 'Ae', 'Ö': 'Oe', 'Ü': 'Ue',
+        'ß': 'ss'
+    }
+    for char, rep in replacements.items():
+        text = text.replace(char, rep)
+    return text
+
 def get_credentials():
     """Retrieves credentials from environment variables or prompts user to input and optionally store them."""
     email = os.getenv("UNI_ASSIST_EMAIL")
@@ -198,19 +211,19 @@ def check_status(headless=False):
             subject = "Unknown"
             subject_loc = card.locator('[data-test="studienfach-name"]')
             if subject_loc.count() > 0:
-                subject = subject_loc.first.inner_text().strip()
+                subject = clean_german_characters(subject_loc.first.inner_text().strip())
                 
             # Extract university name
             university = "Unknown"
             univ_loc = card.locator('[data-test="hochschule-name"]')
             if univ_loc.count() > 0:
-                university = univ_loc.first.inner_text().strip()
+                university = clean_german_characters(univ_loc.first.inner_text().strip())
                 
             # Extract degree name
             degree = "Unknown"
             degree_loc = card.locator('[data-test="abschluss-name"]')
             if degree_loc.count() > 0:
-                degree = degree_loc.first.inner_text().strip()
+                degree = clean_german_characters(degree_loc.first.inner_text().strip())
                 
             # Extract status
             status_text = "Unknown"
@@ -222,6 +235,7 @@ def check_status(headless=False):
                     status_text = raw_status.replace("checklist", "", 1).strip()
                 else:
                     status_text = raw_status
+                status_text = clean_german_characters(status_text)
             
             print(f"- {subject} ({degree}) at {university}")
             print(f"  status: {status_text.lower()}")

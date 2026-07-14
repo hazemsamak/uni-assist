@@ -20,6 +20,19 @@ os.makedirs(DATA_DIR, exist_ok=True)
 AUTH_FILE = os.path.join(DATA_DIR, "auth.json")
 TARGET_URL = "https://my.uni-assist.de/antragsuebersicht"
 
+def clean_german_characters(text: str) -> str:
+    """Replaces German umlauts and special characters with their English/ASCII equivalents."""
+    if not text:
+        return ""
+    replacements = {
+        'ä': 'ae', 'ö': 'oe', 'ü': 'ue',
+        'Ä': 'Ae', 'Ö': 'Oe', 'Ü': 'Ue',
+        'ß': 'ss'
+    }
+    for char, rep in replacements.items():
+        text = text.replace(char, rep)
+    return text
+
 def run_scraping():
     email = os.getenv("UNI_ASSIST_EMAIL")
     password = os.getenv("UNI_ASSIST_PASSWORD")
@@ -185,10 +198,10 @@ def run_scraping():
                         status_text = raw_status
                 
                 applications.append({
-                    "subject": subject,
-                    "degree": degree,
-                    "university": university,
-                    "status": status_text.strip()
+                    "subject": clean_german_characters(subject),
+                    "degree": clean_german_characters(degree),
+                    "university": clean_german_characters(university),
+                    "status": clean_german_characters(status_text.strip())
                 })
             
             return {
