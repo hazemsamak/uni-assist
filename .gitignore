@@ -1,0 +1,31 @@
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Credentials and config
+.env
+
+# Runtime caching, screenshots, and logs
+data/
+
+# OS-generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Python caches
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDE configurations
+.idea/
+.vscode/
+*.swp
+*.swo

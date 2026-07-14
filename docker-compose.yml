@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  uni-assist-api:
+    build: .
+    container_name: uni-assist-api
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      # Mount the data directory to persist the login session and debug assets
+      - ./data:/app/data
+    restart: unless-stopped
